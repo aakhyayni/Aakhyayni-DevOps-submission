@@ -1,0 +1,13 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.tools/
+.minikube/
+.kube/
+.jenkins_home/
+.env
+screenshots/*.png
+screenshots/*.jpg
+!screenshots/README.md
