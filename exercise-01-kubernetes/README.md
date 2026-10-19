@@ -6,14 +6,18 @@ Run an Nginx Pod in a local Kubernetes cluster and reach it through a NodePort S
 
 ## Work
 
-Applied `pod.yaml` and `service.yaml` to Minikube. The Pod and Service use the names and concepts from the lab, with declarative manifests saved here for repeatability.
+Started a local Minikube cluster using the Docker driver, then created the `hello-k8s` Pod from the `nginx` image and exposed port 80 as a NodePort Service.
 
 ## Verification
 
-- Minikube node reached `Ready` on Kubernetes v1.37.0.
-- `kubectl wait --for=condition=Ready pod/hello-k8s` succeeded.
-- The Pod reached `1/1 Running` with IP `10.244.0.3`.
-- The NodePort Service exposed port 80 as `30982`.
-- Port-forwarded the Service to `127.0.0.1:18080`; `curl` returned the Nginx welcome page.
+- `kubectl get nodes` showed the Minikube node as `Ready` on Kubernetes v1.37.0.
+- `kubectl get pods` showed `hello-k8s` as `1/1 Running`.
+- `kubectl get services` showed `hello-k8s` as a `NodePort` Service on `80:30964/TCP`.
+- `minikube service hello-k8s` opened the Nginx welcome page in the browser.
 
-Commands: `kubectl apply -f pod.yaml -f service.yaml`, `kubectl get pods -o wide`, `kubectl get service hello-k8s -o wide`, and `kubectl port-forward service/hello-k8s 18080:80`.
+## Evidence
+
+- [`screenshot/01-nginx-welcome.png`](screenshot/01-nginx-welcome.png): Nginx welcome page served through the Minikube service tunnel.
+- [`screenshot/02-pod-service-terminal.png`](screenshot/02-pod-service-terminal.png): Terminal output showing the Pod, Service, and service tunnel command.
+
+Commands run: `minikube start --driver=docker`, `kubectl get nodes`, `kubectl run hello-k8s --image=nginx --port=80`, `kubectl get pods`, `kubectl expose pod hello-k8s --type=NodePort --port=80`, `kubectl get services`, and `minikube service hello-k8s`.
